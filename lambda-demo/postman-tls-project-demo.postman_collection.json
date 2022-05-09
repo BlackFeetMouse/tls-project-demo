@@ -1,0 +1,141 @@
+{
+	"info": {
+		"_postman_id": "b4dd29e6-4449-4a55-8c89-ddc3278fa56c",
+		"name": "tls-project-demo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "healthCheck",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://d9xhvmmux8.execute-api.ap-northeast-1.amazonaws.com/dev/health",
+					"protocol": "https",
+					"host": [
+						"d9xhvmmux8",
+						"execute-api",
+						"ap-northeast-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"dev",
+						"health"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "postStudent",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"studentId\": \"10002\",\n    \"firstName\": \"Jordan\",\n    \"lastName\": \"Michael\",\n    \"email\": \"mj.air@gmail.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://d9xhvmmux8.execute-api.ap-northeast-1.amazonaws.com/dev/student",
+					"protocol": "https",
+					"host": [
+						"d9xhvmmux8",
+						"execute-api",
+						"ap-northeast-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"dev",
+						"student"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateStudent",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"studentId\": \"10002\",\n    \"updateKey\": \"email\",\n    \"updateValue\": \"my.air@nike.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://d9xhvmmux8.execute-api.ap-northeast-1.amazonaws.com/dev/student",
+					"protocol": "https",
+					"host": [
+						"d9xhvmmux8",
+						"execute-api",
+						"ap-northeast-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"dev",
+						"student"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteStudent",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://d9xhvmmux8.execute-api.ap-northeast-1.amazonaws.com/dev/student?studentId=10001",
+					"protocol": "https",
+					"host": [
+						"d9xhvmmux8",
+						"execute-api",
+						"ap-northeast-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"dev",
+						"student"
+					],
+					"query": [
+						{
+							"key": "studentId",
+							"value": "10001"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getStudent",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "getStudents",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
