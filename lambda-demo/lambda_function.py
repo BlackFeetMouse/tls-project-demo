@@ -34,13 +34,72 @@ def getStudent(studentId):
         logger.exception('Error handling')
 
 
-def saveStudent(requestBody):
+def getStudents():
+    try:
+        response = table.scan()
+        result = response['Items']
+
+        while 'LastEvaluatedKey' in response:
+            response = table.scan(ExclusiveStartKey=response['LastEvaluatedKey'])
+            result.extend(response['Items'])
+
+        body = {
+            'student': result
+        }
+        return buildResponse(200, body)
+
+    except:
+        logger.exception('Error handling')
+
+
+def modifyStudent(studentId, updateKey, updateValue):
+    try:
+        response = table.update_item(
+            Key={
+                'studentId': studentId
+            },
+            UpdateExpression='set %s = :value' % updateKey,
+            ExpressionAttributeValues={
+                ':value': updateValue
+            },
+            ReturnValues='UPDATED_NEW'
+        )
+        body = {
+            'Operation': 'UPDATE',
+            'Message': 'SUCCESS',
+            'UpdatedAttributes': response
+        }
+        return buildResponse(200, body)
+
+    except:
+        logger.exception('Error handling')
+
+
+def createStudent(requestBody):
     try:
         table.put_item(Item=requestBody)
         body = {
-            'Operation': 'SAVE',
+            'Operation': 'CREATE',
             'Message': 'SUCCESS',
             'Item': requestBody
+        }
+        return buildResponse(200, body)
+    except:
+        logger.exception('Error handling')
+
+
+def deleteStudent(studentId):
+    try:
+        response = table.delete_item(
+            Key={
+                'studentId': studentId
+            },
+            ReturnValues='ALL_OLD'
+        )
+        body = {
+            'Operation': 'DELETE',
+            'Message': 'SUCCESS',
+            'deletedItem': response
         }
         return buildResponse(200, body)
     except:
@@ -55,16 +114,16 @@ def lambda_handler(event, context):
         response = buildResponse(200)
     elif httpMethod == getMethod and path == studentPath:
         response = getStudent(event['queryStringParameters']['studentId'])
-    # elif httpMethod == getMethod and path == studentsPath:
-    #     response = getStudents()
+    elif httpMethod == getMethod and path == studentsPath:
+        response = getStudents()
     elif httpMethod == postMethod and path == studentPath:
-        response = saveStudent(json.loads(event['body']))
-    # elif httpMethod == patchMethod and path == studentPath:
-    #     requestBody = json.loads(event['body'])
-    #     response = modifyStudent(requestBody['studentId'], requestBody['updateKey'], requestBody['updateValue'])
-    # elif httpMethod == deleteMethod and path == studentPath:
-    #     requestBody = json.loads(event['body'])
-    #     response = deleteStudent(requestBody['studentId'])
+        response = createStudent(json.loads(event['body']))
+    elif httpMethod == patchMethod and path == studentPath:
+        requestBody = json.loads(event['body'])
+        response = modifyStudent(requestBody['studentId'], requestBody['updateKey'], requestBody['updateValue'])
+    elif httpMethod == deleteMethod and path == studentPath:
+        requestBody = json.loads(event['body'])
+        response = deleteStudent(requestBody['studentId'])
     else:
         response = buildResponse(404, 'Not Found')
 
