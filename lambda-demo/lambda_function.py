@@ -107,6 +107,7 @@ def deleteStudent(studentId):
 
 
 def lambda_handler(event, context):
+    print("Let's get started!")
     logger.info(event)
     httpMethod = event['httpMethod']
     path = event['path']
